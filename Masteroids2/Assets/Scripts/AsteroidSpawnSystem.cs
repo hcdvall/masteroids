@@ -106,6 +106,18 @@ public partial class AsteroidSpawnSystem : SystemBase
 
                 //we then set the Translation component of the Asteroid prefab equal to our new translation component
                 commandBuffer.SetComponent(e, pos);
+
+                //We will now set the VelocityComponent of our asteroids
+                //here we generate a random Vector3 with x, y and z between -1 and 1
+                var randomVel = new Vector3(rand.NextFloat(-1f, 1f), 0, rand.NextFloat(-1f, 1f));
+                //next we normalize it so it has a magnitude of 1
+                randomVel.Normalize();
+                //now we set the magnitude equal to the game settings
+                randomVel = randomVel * settings.asteroidVelocity;
+                //here we create a new VelocityComponent with the velocity data
+                var vel = new VelocityComponent{Value = new float3(randomVel.x, randomVel.y, randomVel.z)};
+                //now we set the velocity component in our asteroid prefab
+                commandBuffer.SetComponent(e, vel);
             }
         }).Schedule();
 
